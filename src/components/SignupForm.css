@@ -115,3 +115,38 @@ body {
     }
   }
   
+  .unified-signup-form {
+    max-width: 440px;
+    margin: 0 auto;
+    padding: 2.5rem 2rem 2rem 2rem;
+    border-radius: 20px;
+    background: #fff;
+    box-shadow: 0 12px 48px 0 rgba(80, 80, 120, 0.18), 0 2px 8px rgba(0,0,0,0.10);
+    border: 1.5px solid #e5e7eb;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem 1.2rem;
+  }
+  
+  .signup-row-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.1rem 1.2rem;
+    width: 100%;
+    grid-column: span 2;
+  }
+  
+  @media (max-width: 700px) {
+    .unified-signup-form {
+      grid-template-columns: 1fr;
+      padding: 1.2rem 0.7rem 1.2rem 0.7rem;
+    }
+    .signup-row-2col {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .interests-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
