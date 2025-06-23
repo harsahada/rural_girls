@@ -1,0 +1,96 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 2rem;
+  background: #fff;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.04);
+  font-family: inherit;
+}
+
+.navbar-left {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.navbar-logo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #a259ff 0%, #f24e1e 100%);
+  padding: 4px;
+}
+
+.navbar-title {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.navbar-brand {
+  font-weight: bold;
+  font-size: 1.3rem;
+  background: linear-gradient(90deg, #a259ff 0%, #f24e1e 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.navbar-subtitle {
+  font-size: 0.85rem;
+  color: #888;
+  margin-top: -2px;
+}
+
+.navbar-theme-btn {
+  margin-left: 1rem;
+  background: #f3f3f3;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.navbar-theme-btn:hover {
+  background: #e0e0e0;
+}
+
+.navbar-menu {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.navbar-menu-item {
+  font-size: 1rem;
+  color: #444;
+  cursor: pointer;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+}
+.navbar-menu-item.active, .navbar-menu-item:hover {
+  color: #a259ff;
+}
+
+.navbar-join-btn {
+  background: linear-gradient(90deg, #a259ff 0%, #f24e1e 100%);
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 0.6em 1.4em;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(162,89,255,0.08);
+  transition: opacity 0.2s;
+}
+.navbar-join-btn:hover {
+  opacity: 0.85;
+} 
