@@ -1,0 +1,117 @@
+/* General body adjustments (if not already handled globally) */
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f6f8fa;
+    color: #18181b;
+    transition: background 0.4s, color 0.4s;
+  }
+  
+  /* Optional container fallback for non-Tailwind setup */
+  .signup-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 1rem;
+    transition: background 0.4s, color 0.4s;
+    color: inherit;
+  }
+  
+  /* Dark mode utility override (if not using Tailwind's dark class) */
+  .dark-mode {
+    background-color: #111827;
+    color: #f3f4f6;
+    transition: background 0.4s, color 0.4s;
+  }
+  
+  /* Form Layout */
+  .signup-form {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    background-color: inherit;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.12), 0 1.5px 6px rgba(0,0,0,0.08);
+    border: 1.5px solid #e5e7eb;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    transition: background 0.4s, color 0.4s, box-shadow 0.4s, border 0.4s;
+    color: inherit;
+  }
+  
+  @media (min-width: 640px) {
+    .signup-form {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  .dark-mode .signup-form {
+    background-color: #1a2233;
+    color: #f3f4f6;
+    border-color: #374151;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.32), 0 1.5px 6px rgba(0,0,0,0.18);
+  }
+  
+  /* Inputs and Selects */
+  .signup-input {
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    background-color: white;
+    color: black;
+    transition: background 0.4s, color 0.4s, border 0.4s;
+  }
+  
+  .dark-mode .signup-input {
+    background-color: #232b3b;
+    color: white;
+    border-color: #4b5563;
+  }
+  
+  /* Labels */
+  .signup-label {
+    display: block;
+    margin-bottom: 0.25rem;
+    font-weight: 500;
+    color: inherit;
+    transition: color 0.4s;
+  }
+  
+  .signup-form h2,
+  .signup-form legend {
+    color: inherit;
+    transition: color 0.4s;
+  }
+  
+  /* Button */
+  .signup-button {
+    grid-column: span 2;
+    padding: 0.5rem 1rem;
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    border-radius: 0.375rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .signup-button:hover {
+    background-color: #1d4ed8;
+  }
+  
+  /* Interests checkboxes */
+  .interests-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+  
+  @media (min-width: 640px) {
+    .interests-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
