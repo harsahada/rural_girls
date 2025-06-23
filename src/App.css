@@ -5,6 +5,11 @@
   text-align: center;
 }
 
+/* Utility class for margin below fixed navbar */
+.mt-navbar {
+  margin-top: 80px;
+}
+
 .logo {
   height: 6em;
   padding: 1.5em;
