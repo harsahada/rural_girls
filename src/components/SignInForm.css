@@ -1,11 +1,11 @@
-/* Modern, unified sign-in form styles */
+/* Modern, minimal, accessible sign-in form styles */
 .signin-modal-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(30, 32, 34, 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -14,8 +14,8 @@
 
 .signin-modal {
   background: #fff;
-  border-radius: 22px;
-  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.13);
+  border-radius: 18px;
+  box-shadow: 0 4px 32px 0 rgba(30, 32, 34, 0.10);
   padding: 2.5rem 2rem 2rem 2rem;
   min-width: 340px;
   max-width: 95vw;
@@ -26,137 +26,168 @@
   transition: box-shadow 0.2s;
 }
 
-.signin-modal h2 {
+.signin-title {
   margin-bottom: 1.5rem;
   font-size: 2rem;
-  font-weight: 800;
-  color: #18181b;
+  font-weight: 700;
+  color: #23272f;
   text-align: center;
+  letter-spacing: -0.5px;
 }
 
-.signin-modal form {
+.signin-form {
   width: 100%;
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: 1.2rem;
 }
 
-.signin-modal label {
+.email-label, .password-label {
   font-weight: 500;
-  color: #3a2066;
+  color: #23272f;
   margin-bottom: 0.2rem;
   font-size: 1rem;
+  letter-spacing: 0.01em;
 }
 
-.signin-modal input[type="email"],
-.signin-modal input[type="password"],
-.signin-modal input[type="text"] {
+.email-input-wrapper {
+  position: relative;
+  width: 100%;
+}
+.email-input, .password-input {
   width: 100%;
   padding: 0.7rem 1rem;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 10px;
-  font-size: 1rem;
-  background: #fafaff;
-  color: #18181b;
+  border: 2px solid #d1d5db;
+  border-radius: 8px;
+  font-size: 1.08rem;
+  background: #f8fafc;
+  color: #23272f;
   transition: border 0.2s, box-shadow 0.2s;
   margin-top: 4px;
-  margin-bottom: 0.5rem;
-}
-.signin-modal input:focus {
-  border: 1.5px solid #a259ec;
+  margin-bottom: 0.2rem;
   outline: none;
-  box-shadow: 0 0 0 2px #e0d7fa;
+  box-shadow: 0 1px 4px rgba(30,32,34,0.06);
+}
+.email-input:focus, .password-input:focus {
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 0 2px #dbeafe, 0 1px 4px rgba(30,32,34,0.06);
+  background: #fff;
+}
+.email-input::placeholder, .password-input::placeholder {
+  color: #b0b6be;
+  opacity: 1;
+}
+input:invalid.email-input {
+  border: 2px solid #e11d48;
+}
+
+.email-icon {
+  display: none;
 }
 
 .password-input-wrapper {
   display: flex;
   align-items: center;
   position: relative;
+  width: 100%;
 }
 .toggle-password {
   position: absolute;
-  right: 12px;
+  right: 14px;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
-  font-size: 1.1rem;
-  color: #a259ec;
+  font-size: 1.15rem;
+  color: #3b82f6;
   user-select: none;
   background: none;
   border: none;
   padding: 0;
+  transition: color 0.2s;
+}
+.toggle-password:hover, .toggle-password:focus {
+  color: #1d4ed8;
+}
+
+.signin-error {
+  color: #e11d48;
+  min-height: 22px;
+  font-size: 0.98rem;
+  margin-top: 2px;
+  text-align: left;
+  padding-left: 2px;
 }
 
 .signin-btn {
   width: 100%;
   padding: 1em 0;
-  background: linear-gradient(90deg, #e75480 0%, #a259ec 100%);
+  background: #3b82f6;
   color: #fff;
-  font-size: 1.15rem;
-  font-weight: 700;
+  font-size: 1.12rem;
+  font-weight: 600;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   cursor: pointer;
   margin-top: 0.5rem;
   margin-bottom: 0.5rem;
-  box-shadow: 0 2px 8px rgba(162, 89, 236, 0.08);
+  box-shadow: 0 1px 6px rgba(59, 130, 246, 0.07);
   transition: background 0.2s, box-shadow 0.2s;
 }
-.signin-btn:hover {
-  background: linear-gradient(90deg, #a259ec 0%, #e75480 100%);
-}
-
-.cancel-btn, .signin-modal button[type="button"] {
-  background: #f3f4f6;
-  color: #444;
-  border: 1.5px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 0.6em 2.2em;
-  font-size: 1rem;
-  font-weight: 500;
-  cursor: pointer;
-  margin: 0 auto;
-  display: block;
-  min-width: 120px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
-  transition: background 0.2s, color 0.2s;
-}
-.cancel-btn:hover, .signin-modal button[type="button"]:hover {
-  background: #e5e7eb;
-  color: #a259ec;
+.signin-btn:hover, .signin-btn:focus {
+  background: #2563eb;
 }
 
 .signup-link {
   margin-top: 1.2rem;
   text-align: center;
-  color: #3a2066;
+  color: #23272f;
   font-size: 1rem;
 }
 .signup-link .link {
-  color: #a259ec;
+  color: #3b82f6;
   cursor: pointer;
   font-weight: 600;
   margin-left: 0.2rem;
   text-decoration: underline;
   transition: color 0.2s;
 }
-.signup-link .link:hover {
-  color: #e75480;
+.signup-link .link:hover, .signup-link .link:focus {
+  color: #2563eb;
+}
+
+.cancel-btn-wrapper {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin-top: 18px;
+}
+.cancel-btn {
+  background: #f3f4f6;
+  color: #23272f;
+  border: 1.5px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.5em 1.5em;
+  font-size: 0.98rem;
+  font-weight: 500;
+  cursor: pointer;
+  min-width: 100px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  display: block;
+  margin: 0 auto;
+}
+.cancel-btn:hover, .cancel-btn:focus {
+  background: #e5e7eb;
+  color: #3b82f6;
+  border: 1.5px solid #3b82f6;
 }
 
 @media (max-width: 500px) {
   .signin-modal {
     min-width: 0;
     padding: 1.2rem 0.7rem 1.2rem 0.7rem;
-    border-radius: 12px;
+    border-radius: 10px;
   }
-}
-
-input:invalid {
-  border-color: #e75480;
-}
-input:invalid:focus {
-  box-shadow: 0 0 0 2px #fbe4ec;
 }
 
 ::-webkit-scrollbar {
@@ -167,31 +198,4 @@ input:invalid:focus {
 ::-webkit-scrollbar-thumb {
   background: #e5e7eb;
   border-radius: 8px;
-}
-
-.signin-modal input[type="email"] {
-  background: #f6f8fa;
-  padding-left: 2.5em;
-  position: relative;
-}
-
-.signin-modal .email-icon {
-  position: absolute;
-  left: 16px;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 1.1rem;
-  color: #a259ec;
-  pointer-events: none;
-  z-index: 2;
-}
-
-.signin-modal .email-input-wrapper {
-  position: relative;
-  width: 100%;
-}
-
-.signin-modal input[type="email"]:focus {
-  border: 1.5px solid #5d5fef;
-  background: #f3f4f6;
 } 

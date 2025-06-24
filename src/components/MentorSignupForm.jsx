@@ -105,10 +105,6 @@ export default function MentorSignupForm({ onCancel, onSignIn }) {
               {mentorErrors.fullName && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.fullName}</span>}
             </div>
             <div>
-              <label className="signup-label">Phonetic Spelling (Optional)</label>
-              <input type="text" name="phoneticName" value={mentorData.phoneticName} onChange={handleMentorChange} className="signup-input" />
-            </div>
-            <div>
               <label className="signup-label">Email Address *</label>
               <input type="email" name="email" value={mentorData.email} onChange={handleMentorChange} className="signup-input" required />
               {mentorErrors.email && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.email}</span>}
@@ -146,8 +142,8 @@ export default function MentorSignupForm({ onCancel, onSignIn }) {
               {mentorErrors.experience && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.experience}</span>}
             </div>
             <div>
-              <label className="signup-label">Industry/Discipline *</label>
-              <input type="text" name="industry" value={mentorData.industry} onChange={handleMentorChange} className="signup-input" required />
+              <label className="signup-label">Industry/Discipline (optional)</label>
+              <input type="text" name="industry" value={mentorData.industry} onChange={handleMentorChange} className="signup-input"  />
               {mentorErrors.industry && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.industry}</span>}
             </div>
             <div style={{ gridColumn: 'span 2' }}>
@@ -168,71 +164,9 @@ export default function MentorSignupForm({ onCancel, onSignIn }) {
             {mentorErrors.mentoringSkills && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.mentoringSkills}</span>}
           </div>
           <div>
-            <label className="signup-label">Skills You'd Like to Develop Further</label>
-            <textarea name="developmentSkills" value={mentorData.developmentSkills} onChange={handleMentorChange} className="signup-input" rows={2} placeholder="What skills would you like to improve or learn more about?" />
-          </div>
-          <div>
             <label className="signup-label">Goals for Participating in the Program *</label>
             <textarea name="goals" value={mentorData.goals} onChange={handleMentorChange} className="signup-input" rows={2} required placeholder="What do you hope to achieve through this mentorship program?" />
             {mentorErrors.goals && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.goals}</span>}
-          </div>
-        </section>
-        {/* Availability and Commitment */}
-        <section style={sectionStyle('#fef6ed', 'none', '#ea580c')}>
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
-            <span style={iconStyle} role="img" aria-label="Availability">📅</span>
-            <span style={{ fontWeight: 700, fontSize: 20, color: '#ea580c' }}>Availability and Commitment</span>
-          </div>
-          <div className="signup-row-2col">
-            <div>
-              <label className="signup-label">Time Available per Month *</label>
-              <select name="hoursPerMonth" value={mentorData.hoursPerMonth} onChange={handleMentorChange} className="signup-input" required>
-                <option value="">Select hours per month</option>
-                <option value="1-2">1-2 hours</option>
-                <option value="3-5">3-5 hours</option>
-                <option value="6-10">6-10 hours</option>
-                <option value="11-15">11-15 hours</option>
-                <option value="16+">16+ hours</option>
-              </select>
-              {mentorErrors.hoursPerMonth && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.hoursPerMonth}</span>}
-            </div>
-            <div>
-              <label className="signup-label">Preferred Meeting Frequency *</label>
-              <select name="meetingFrequency" value={mentorData.meetingFrequency} onChange={handleMentorChange} className="signup-input" required>
-                <option value="">Select frequency</option>
-                <option value="weekly">Weekly</option>
-                <option value="bi-weekly">Bi-weekly</option>
-                <option value="monthly">Monthly</option>
-                <option value="quarterly">Quarterly</option>
-              </select>
-              {mentorErrors.meetingFrequency && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.meetingFrequency}</span>}
-            </div>
-          </div>
-          <div style={{ marginTop: 12 }}>
-            <label className="signup-label">Program Duration Commitment</label>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 12 }}>
-              {['3-months','6-months','12-months','ongoing'].map(val => (
-                <label key={val} style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-                  <input type="radio" name="duration" value={val} checked={mentorData.duration === val} onChange={handleMentorChange} />
-                  <span style={{ fontSize: 14 }}>{val.replace('-', ' ')}</span>
-                </label>
-              ))}
-            </div>
-          </div>
-        </section>
-        {/* Additional Information */}
-        <section style={sectionStyle('#f3f4f6', 'none', '#222')}>
-          <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
-            <span style={iconStyle} role="img" aria-label="Info">ℹ️</span>
-            <span style={{ fontWeight: 700, fontSize: 20, color: '#222' }}>Additional Information</span>
-          </div>
-          <div>
-            <label className="signup-label">Mentee Preferences</label>
-            <textarea name="menteePreferences" value={mentorData.menteePreferences} onChange={handleMentorChange} className="signup-input" rows={2} placeholder="Any specific requirements or preferences for mentees (e.g., career stage, industry, goals)..." />
-          </div>
-          <div>
-            <label className="signup-label">Accommodations Needed</label>
-            <textarea name="accommodations" value={mentorData.accommodations} onChange={handleMentorChange} className="signup-input" rows={2} placeholder="Any disabilities or accommodations needed for effective mentoring..." />
           </div>
         </section>
         {/* Consent and Agreement */}
@@ -252,15 +186,6 @@ export default function MentorSignupForm({ onCancel, onSignIn }) {
               <span className="signup-label" style={{ fontWeight: 400 }}>I commit to fulfilling my mentoring responsibilities for the duration specified above. *</span>
             </label>
             {mentorErrors.commitment && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.commitment}</span>}
-            <div>
-              <label className="signup-label">Digital Signature *</label>
-              <input type="text" name="signature" value={mentorData.signature} onChange={handleMentorChange} className="signup-input" required placeholder="Type your full name as your digital signature" />
-              {mentorErrors.signature && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.signature}</span>}
-            </div>
-            <div>
-              <label className="signup-label">Date</label>
-              <input type="date" name="signatureDate" value={mentorData.signatureDate || new Date().toISOString().split('T')[0]} onChange={handleMentorChange} className="signup-input" required />
-            </div>
           </div>
         </section>
         <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: 18, marginBottom: 8 }}>
