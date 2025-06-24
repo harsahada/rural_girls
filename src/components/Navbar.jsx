@@ -13,9 +13,18 @@ import {
   UserPlus
 } from 'lucide-react';
 
-const Navbar = ({ onJoinFree, onSignIn }) => {
+const Navbar = ({ onJoinFree, onSignIn, onELearning, onHome, onMentorship, onSkills, onCommunity, onMarketplace, onBusiness, activePage }) => {
+  const menuItems = [
+    { label: 'Home', icon: <Heart size={18} />, onClick: onHome, key: 'home' },
+    { label: 'E-Learning', icon: <BookOpen size={18} />, onClick: onELearning, key: 'elearning' },
+    { label: 'Mentorship', icon: <Users size={18} />, onClick: onMentorship, key: 'mentorship' },
+    { label: 'Skills', icon: <Target size={18} />, onClick: onSkills, key: 'skills' },
+    { label: 'Community', icon: <MessageCircle size={18} />, onClick: onCommunity, key: 'community' },
+    { label: 'Marketplace', icon: <ShoppingCart size={18} />, onClick: onMarketplace, key: 'marketplace' },
+    { label: 'Business', icon: <Briefcase size={18} />, onClick: onBusiness, key: 'business' },
+  ];
   return (
-    <header className="navbar" role="banner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', position: 'sticky', top: 0, zIndex: 100 }}>
+    <header className="navbar" role="banner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '110%', position: 'sticky', top: 0, zIndex: 100 ,backgroundColor:'#adda3f',borderRadius:17 }}>
       <div className="navbar-left" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
         <div className="navbar-logo" style={{ background: 'linear-gradient(135deg, #a259ff 0%, #5d5fef 100%)', width: 44, height: 44, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} aria-label="SheRise logo">
           <Globe color="#fff" size={26} />
@@ -30,41 +39,42 @@ const Navbar = ({ onJoinFree, onSignIn }) => {
       </div>
       <nav aria-label="Main navigation" style={{ flex: 1, display: 'flex', justifyContent: 'center' }}>
         <ul className="navbar-menu" style={{ display: 'flex', alignItems: 'center', gap: 28, listStyle: 'none', margin: 0, padding: 0 }}>
-          <li className="navbar-menu-item active" style={{ background: 'linear-gradient(90deg, #a259ff 0%, #5d5fef 100%)', color: '#fff', borderRadius: 24, padding: '0.5em 1.6em', fontWeight: 600, display: 'flex', alignItems: 'center', gap: 8, boxShadow: '0 2px 8px rgba(162,89,255,0.08)' }}>
-            <a href="#" style={{ color: 'inherit', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }} aria-current="page">
-              <Heart size={18} /> Home
-            </a>
-          </li>
-          <li className="navbar-menu-item">
-            <a href="#" style={{ color: '#444', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <BookOpen size={18} /> E-Learning
-            </a>
-          </li>
-          <li className="navbar-menu-item">
-            <a href="#" style={{ color: '#444', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Users size={18} /> Mentorship
-            </a>
-          </li>
-          <li className="navbar-menu-item">
-            <a href="#" style={{ color: '#444', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Target size={18} /> Skills
-            </a>
-          </li>
-          <li className="navbar-menu-item">
-            <a href="#" style={{ color: '#444', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <MessageCircle size={18} /> Community
-            </a>
-          </li>
-          <li className="navbar-menu-item">
-            <a href="#" style={{ color: '#444', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <ShoppingCart size={18} /> Marketplace
-            </a>
-          </li>
-          <li className="navbar-menu-item">
-            <a href="#" style={{ color: '#444', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8 }}>
-              <Briefcase size={18} /> Business
-            </a>
-          </li>
+          {menuItems.map(item => (
+            <li
+              key={item.key}
+              className={`navbar-menu-item${activePage === item.key ? ' navbar-menu-item-active' : ''}`}
+              style={activePage === item.key ? {
+                background: 'linear-gradient(90deg, #a259ff 0%, #5d5fef 100%)',
+                color: '#fff',
+                borderRadius: 24,
+                padding: '0.5em 1.6em',
+                fontWeight: 600,
+                display: 'flex',
+                alignItems: 'center',
+                gap: 8,
+                boxShadow: '0 2px 8px rgba(162,89,255,0.08)',
+                transition: 'background 0.2s, color 0.2s, box-shadow 0.2s, transform 0.2s',
+              } : {}}
+            >
+              <a
+                href="#"
+                onClick={item.onClick}
+                style={{
+                  color: activePage === item.key ? '#fff' : '#444',
+                  textDecoration: 'none',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: 8,
+                  fontWeight: 600,
+                  fontSize: 16,
+                  transition: 'color 0.2s',
+                }}
+                aria-current={activePage === item.key ? 'page' : undefined}
+              >
+                {item.icon} {item.label}
+              </a>
+            </li>
+          ))}
         </ul>
       </nav>
       <div className="navbar-actions" style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
