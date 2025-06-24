@@ -10,12 +10,14 @@ import Skills from './components/Skills.jsx'
 import Community from './components/Community.jsx'
 import Marketplace from './components/Marketplace.jsx'
 import Business from './components/Business.jsx'
+import BusinessForm from './components/BusinessForm.jsx'
 import './App.css'
 
 function App() {
   const [showSignup, setShowSignup] = useState(false)
   const [showSignIn, setShowSignIn] = useState(false)
   const [page, setPage] = useState('home');
+  const [showBusinessForm, setShowBusinessForm] = useState(false);
 
   // Handler to open the signup modal
   const handleJoinFree = () => setShowSignup(true)
@@ -47,6 +49,9 @@ function App() {
   const handleMarketplace = () => setPage('marketplace');
   const handleBusiness = () => setPage('business');
 
+  const handleAddBusinessClick = () => setShowBusinessForm(true);
+  const handleCloseBusinessForm = () => setShowBusinessForm(false);
+
   // Placeholder components for other pages
   // const Mentorship = () => <div style={{minHeight:'60vh',display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,fontWeight:600}}>Mentorship Page</div>;
   // const Community = () => <div style={{minHeight:'60vh',display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,fontWeight:600}}>Community Page</div>;
@@ -66,6 +71,7 @@ function App() {
         onBusiness={handleBusiness}
         activePage={page}
       />
+      {showBusinessForm && <BusinessForm onBack={handleCloseBusinessForm} />}
       {showSignup && (
         <div style={{position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.35)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
           <div style={{position: 'relative', zIndex: 1001}}>
@@ -83,7 +89,7 @@ function App() {
         {page === 'mentorship' && <Mentorship />}
         {page === 'skills' && <Skills />}
         {page === 'community' && <Community />}
-        {page === 'marketplace' && <Marketplace />}
+        {page === 'marketplace' && <Marketplace onAddBusinessClick={handleAddBusinessClick} />}
         {page === 'business' && <Business />}
       </main>
       <Footer />
