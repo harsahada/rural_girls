@@ -70,12 +70,12 @@ function App() {
         <div style={{position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.35)', zIndex: 1000, display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
           <div style={{position: 'relative', zIndex: 1001}}>
             <button onClick={handleCloseSignup} style={{position: 'absolute', top: 10, right: 10, background: 'transparent', border: 'none', fontSize: 24, cursor: 'pointer'}}>×</button>
-            <SignupForm onSignIn={handleSwitchToSignIn} />
+            <SignupForm onSignIn={handleSwitchToSignIn} onCancel={handleCloseSignup} />
           </div>
         </div>
       )}
       {showSignIn && (
-        <SignInForm onSignIn={handleCloseSignIn} onSignUp={handleSwitchToSignUp} />
+        <SignInForm onSignIn={handleCloseSignIn} onSignUp={handleSwitchToSignUp} onClose={handleCloseSignIn} />
       )}
       <main >
         {page === 'home' && <Home />}

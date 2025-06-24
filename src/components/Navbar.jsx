@@ -24,7 +24,7 @@ const Navbar = ({ onJoinFree, onSignIn, onELearning, onHome, onMentorship, onSki
     { label: 'Business', icon: <Briefcase size={18} />, onClick: onBusiness, key: 'business' },
   ];
   return (
-    <header className="navbar" role="banner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', position: 'sticky', top: 0, zIndex: 100 ,backgroundColor:'#adda3f',borderRadius:17 }}>
+    <header className="navbar" role="banner" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', position: 'sticky', top: 0, zIndex: 100 ,backgroundColor:'#adda3f' }}>
       <div className="navbar-left" style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
         <div className="navbar-logo" style={{ background: 'linear-gradient(135deg, #a259ff 0%, #5d5fef 100%)', width: 44, height: 44, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }} aria-label="SheRise logo">
           <Globe color="#fff" size={26} />

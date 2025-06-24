@@ -59,6 +59,7 @@ const SignInForm = ({ onSignIn, onSignUp, onClose }) => {
               padding: '0.6em 2.2em',
               fontSize: 16,
               fontWeight: 500,
+              justifyContent:'center',
               cursor: 'pointer',
               boxShadow: '0 1px 4px rgba(0,0,0,0.07)'
             }}
