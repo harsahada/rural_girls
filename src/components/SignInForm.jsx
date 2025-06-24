@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import './SignInForm.css';
+import { signin, saveToken } from './api.js';
+
 
 const validateEmail = (email) => {
   // Simple email regex
@@ -12,18 +14,49 @@ const SignInForm = ({ onSignIn, onSignUp, onClose }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    
     if (!email || !password) {
       setError('Please fill in all required fields.');
       return;
     }
+    
     if (!validateEmail(email)) {
       setError('Please enter a valid email address.');
       return;
     }
-    if (onSignIn) onSignIn(email, password);
+  
+    try {
+      // Show loading state
+      setError('Signing in...');
+      
+      // Call backend API
+      const response = await signin(email, password);
+  
+      if (response.success) {
+        // Save token
+        saveToken(response.token);
+        
+        // Clear form
+        setEmail('');
+        setPassword('');
+        setError('');
+        
+        // Show success message
+        alert(`Welcome back, ${response.user.fullName}!`);
+        
+        // Call parent function if provided
+        if (onSignIn) onSignIn(response.user, response.token);
+        
+      } else {
+        setError(response.message || 'Login failed');
+      }
+    } catch (error) {
+      console.error('Sign in error:', error);
+      setError('Something went wrong. Please try again.');
+    }
   };
 
   return (

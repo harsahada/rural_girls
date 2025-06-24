@@ -1,5 +1,7 @@
 import { useState } from "react";
 import './SignupForm.css';
+import { signupMentor } from './api.js';
+
 
 const mentorInitial = {
   fullName: '',
@@ -50,35 +52,108 @@ export default function MentorSignupForm({ onCancel, onSignIn }) {
   };
 
   const validateMentor = () => {
-    const required = ['fullName', 'email', 'phone', 'jobTitle', 'experience', 'industry', 'mentoringSkills', 'goals', 'hoursPerMonth', 'meetingFrequency', 'terms', 'commitment', 'signature'];
+    // Only check fields that actually exist in your form and are required
+    const required = ['fullName', 'email', 'phone', 'jobTitle', 'experience', 'mentoringSkills', 'goals', 'terms', 'commitment'];
     const errors = {};
+    
     required.forEach(field => {
-      if (!mentorData[field] || (typeof mentorData[field] === 'string' && mentorData[field].trim() === '')) {
-        errors[field] = 'Required';
+      if (field === 'terms' || field === 'commitment') {
+        // For checkboxes, check if they're true
+        if (!mentorData[field]) {
+          errors[field] = 'Required';
+        }
+      } else {
+        // For text fields, check if they exist and aren't empty
+        if (!mentorData[field] || (typeof mentorData[field] === 'string' && mentorData[field].trim() === '')) {
+          errors[field] = 'Required';
+        }
       }
     });
-    // Email format
+    
+    // Email format validation
     if (mentorData.email && !/^\S+@\S+\.\S+$/.test(mentorData.email)) {
       errors.email = 'Invalid email';
     }
-    // Phone format (basic)
+    
+    // Phone format validation (basic)
     if (mentorData.phone && !/^\+?\d{7,15}$/.test(mentorData.phone.replace(/\s/g, ''))) {
       errors.phone = 'Invalid phone';
     }
+    
+    console.log('🔍 Validation errors:', errors); // Debug log
     return errors;
   };
 
-  const handleMentorSubmit = (e) => {
+  const handleMentorSubmit = async (e) => {
     e.preventDefault();
+    console.log('🚀 Mentor form submitted!');
+    
     setMentorSuccess('');
     const errors = validateMentor();
+    console.log('🔍 Validation result:', errors);
+    
     setMentorErrors(errors);
+    
     if (Object.keys(errors).length === 0) {
-      setMentorSuccess('Thank you for your mentor application! We will review your submission and contact you soon.');
-      setMentorData({ ...mentorInitial, signatureDate: new Date().toISOString().split('T')[0] });
+      try {
+        console.log('✅ Validation passed, submitting to API...');
+        
+        // Show loading state
+        setMentorSuccess('Submitting your application...');
+        
+        const mentorPayload = {
+          fullName: mentorData.fullName,
+          phoneticName: mentorData.phoneticName,
+          email: mentorData.email,
+          phone: mentorData.phone,
+          jobTitle: mentorData.jobTitle,
+          experience: mentorData.experience,
+          industry: mentorData.industry,
+          mentoringExperience: mentorData.mentoringExperience,
+          mentoringSkills: mentorData.mentoringSkills,
+          developmentSkills: mentorData.developmentSkills,
+          goals: mentorData.goals,
+          hoursPerMonth: mentorData.hoursPerMonth || '',
+          meetingFrequency: mentorData.meetingFrequency || '',
+          duration: mentorData.duration || '',
+          menteePreferences: mentorData.menteePreferences || '',
+          accommodations: mentorData.accommodations || '',
+          signature: mentorData.signature || 'Digital Signature',
+          signatureDate: new Date().toISOString().split('T')[0],
+        };
+        
+        console.log('📤 Sending mentor data:', mentorPayload);
+        
+        // Call backend API
+        const response = await signupMentor(mentorPayload);
+        
+        console.log('📥 API Response:', response);
+  
+        if (response.success) {
+          setMentorSuccess(response.message);
+          
+          // Reset form
+          setMentorData({ ...mentorInitial, signatureDate: new Date().toISOString().split('T')[0] });
+          
+          // Clear errors
+          setMentorErrors({});
+          
+        } else {
+          console.error('❌ API Error:', response.message);
+          setMentorSuccess('');
+          setMentorErrors({ general: response.message || 'Failed to submit application' });
+        }
+      } catch (error) {
+        console.error('❌ Mentor signup error:', error);
+        setMentorSuccess('');
+        setMentorErrors({ general: 'Something went wrong. Please try again.' });
+      }
+    } else {
+      console.log('❌ Validation failed, not submitting');
     }
   };
 
+  
   return (
     <div style={{ maxHeight: '80vh', overflowY: 'auto', paddingRight: 8 }}>
       <form onSubmit={handleMentorSubmit} className="mentor-signup-form" style={{ width: '100%' }}>

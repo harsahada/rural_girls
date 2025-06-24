@@ -1,13 +1,15 @@
 import mongoose from "mongoose"
 import bcrypt from "bcryptjs"
 
+// Define what a User looks like in our database
 const userSchema = new mongoose.Schema(
   {
-    name: {
+    // Basic Information
+    fullName: {
       type: String,
-      required: [true, "Name is required"],
+      required: [true, "Full name is required"],
       trim: true,
-      maxlength: [50, "Name cannot exceed 50 characters"],
+      maxlength: [100, "Name cannot exceed 100 characters"],
     },
     email: {
       type: String,
@@ -21,24 +23,98 @@ const userSchema = new mongoose.Schema(
       required: [true, "Password is required"],
       minlength: [6, "Password must be at least 6 characters"],
     },
+
+    // User Role
     role: {
       type: String,
-      enum: ["user", "admin"],
-      default: "user",
+      enum: ["user", "mentor"],
+      required: true,
     },
+
+    // User-specific fields
+    state: {
+      type: String,
+      required: function () {
+        return this.role === "user"
+      },
+    },
+    age: {
+      type: Number,
+      required: function () {
+        return this.role === "user"
+      },
+    },
+    language: {
+      type: String,
+    },
+    interests: [
+      {
+        type: String,
+      },
+    ],
+
+    // Mentor-specific fields
+    phoneticName: String,
+    phone: {
+      type: String,
+      required: function () {
+        return this.role === "mentor"
+      },
+    },
+    jobTitle: {
+      type: String,
+      required: function () {
+        return this.role === "mentor"
+      },
+    },
+    experience: {
+      type: String,
+      required: function () {
+        return this.role === "mentor"
+      },
+    },
+    industry: String,
+    mentoringExperience: String,
+    mentoringSkills: {
+      type: String,
+      required: function () {
+        return this.role === "mentor"
+      },
+    },
+    developmentSkills: String,
+    goals: {
+      type: String,
+      required: function () {
+        return this.role === "mentor"
+      },
+    },
+    hoursPerMonth: String,
+    meetingFrequency: String,
+    duration: String,
+    menteePreferences: String,
+    accommodations: String,
+    signature: String,
+    signatureDate: String,
+
+    // Common fields
     isActive: {
       type: Boolean,
       default: true,
     },
+    isApproved: {
+      type: Boolean,
+      default: function () {
+        return this.role === "user"
+      }, // Users auto-approved, mentors need approval
+    },
   },
   {
-    timestamps: true, // Adds createdAt and updatedAt automatically
+    timestamps: true,
   },
 )
 
 // Hash password before saving
 userSchema.pre("save", async function (next) {
-  // Only hash if password is modified
   if (!this.isModified("password")) return next()
 
   try {

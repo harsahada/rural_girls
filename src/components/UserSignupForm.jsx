@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { signupUser, saveToken } from './api.js';
 import { Eye, EyeOff } from "lucide-react";
 import './SignupForm.css';
 
@@ -67,26 +68,70 @@ export default function UserSignupForm({ onCancel, onSignIn }) {
     return '';
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const err = validateUser();
     setUserError(err);
+    
     if (!err) {
-      // Simulate success
-      alert('Account created!');
-      setFormData({
-        fullName: "",
-        email: "",
-        password: "",
-        confirmPassword: "",
-        state: "",
-        age: "",
-        language: "",
-        interests: [],
-      });
+      try {
+        console.log('🚀 Starting user signup process...');
+        console.log('📝 Form data:', formData);
+        
+        // Show loading state
+        setUserError('Creating your account...');
+        
+        // Prepare data for API
+        const userData = {
+          fullName: formData.fullName,
+          email: formData.email,
+          password: formData.password,
+          state: formData.state,
+          age: parseInt(formData.age),
+          language: formData.language,
+          interests: formData.interests,
+        };
+        
+        console.log('📤 Sending to API:', userData);
+        
+        // Call backend API
+        const response = await signupUser(userData);
+        
+        console.log('📥 API Response:', response);
+  
+        if (response.success) {
+          // Save token for automatic login
+          saveToken(response.token);
+          
+          // Show success message
+          alert(`Welcome ${response.user.fullName}! Your account has been created successfully.`);
+          
+          // Reset form
+          setFormData({
+            fullName: "",
+            email: "",
+            password: "",
+            confirmPassword: "",
+            state: "",
+            age: "",
+            language: "",
+            interests: [],
+          });
+          
+          // Clear error
+          setUserError('');
+          
+        } else {
+          console.error('❌ Signup failed:', response.message);
+          setUserError(response.message || 'Failed to create account');
+        }
+      } catch (error) {
+        console.error('❌ Signup error:', error);
+        setUserError('Something went wrong. Please check if the backend server is running.');
+      }
     }
   };
-
+          
   return (
     <div style={{ maxWidth: 440, margin: '0 auto', background: '#fff', borderRadius: 18, boxShadow: '0 8px 32px 0 rgba(31,38,135,0.10)', padding: '2.5rem 2rem', maxHeight: '80vh', overflowY: 'auto', position: 'relative' }}>
       <form onSubmit={handleSubmit} style={{ width: '100%' }}>
