@@ -102,6 +102,12 @@ const Marketplace = () => {
           <select value={location} onChange={e => setLocation(e.target.value)} style={{ flex: 1, minWidth: 180, fontSize: 16, borderRadius: 12, border: '1.5px solid #e0e0e0', padding: '0 18px', background: '#fff', color: '#222', fontWeight: 500, height: 52 }}>
             {locations.map(l => <option key={l}>{l}</option>)}
           </select>
+          <button
+            style={{ flex: 'none', minWidth: 160, fontSize: 16, borderRadius: 12, border: 'none', padding: '0 18px', background: 'linear-gradient(90deg, #a259c6 0%, #5d5fef 100%)', color: '#fff', fontWeight: 600, height: 52, cursor: 'pointer', boxShadow: '0 2px 8px rgba(162,89,255,0.08)' }}
+            onClick={() => alert('Add your business functionality coming soon!')}
+          >
+            + Add ur business
+          </button>
         </div>
         {/* Business Cards */}
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 32 }}>
