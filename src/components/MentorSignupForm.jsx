@@ -24,6 +24,8 @@ const mentorInitial = {
   commitment: false,
   signature: '',
   signatureDate: '',
+  password: '',
+  confirmPassword: '',
 };
 
 const sectionStyle = (bg, border, color) => ({
@@ -53,7 +55,7 @@ export default function MentorSignupForm({ onCancel, onSignIn }) {
 
   const validateMentor = () => {
     // Only check fields that actually exist in your form and are required
-    const required = ['fullName', 'email', 'phone', 'jobTitle', 'experience', 'mentoringSkills', 'goals', 'terms', 'commitment'];
+    const required = ['fullName', 'email', 'phone', 'jobTitle', 'experience', 'mentoringSkills', 'goals', 'password', 'confirmPassword', 'terms', 'commitment'];
     const errors = {};
     
     required.forEach(field => {
@@ -78,6 +80,11 @@ export default function MentorSignupForm({ onCancel, onSignIn }) {
     // Phone format validation (basic)
     if (mentorData.phone && !/^\+?\d{7,15}$/.test(mentorData.phone.replace(/\s/g, ''))) {
       errors.phone = 'Invalid phone';
+    }
+    
+    // Password match validation
+    if (mentorData.password !== mentorData.confirmPassword) {
+      errors.confirmPassword = 'Passwords do not match';
     }
     
     console.log('🔍 Validation errors:', errors); // Debug log
@@ -120,6 +127,7 @@ export default function MentorSignupForm({ onCancel, onSignIn }) {
           accommodations: mentorData.accommodations || '',
           signature: mentorData.signature || 'Digital Signature',
           signatureDate: new Date().toISOString().split('T')[0],
+          password: mentorData.password,
         };
         
         console.log('📤 Sending mentor data:', mentorPayload);
@@ -188,6 +196,16 @@ export default function MentorSignupForm({ onCancel, onSignIn }) {
               <label className="signup-label">Phone Number *</label>
               <input type="tel" name="phone" value={mentorData.phone} onChange={handleMentorChange} className="signup-input" required />
               {mentorErrors.phone && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.phone}</span>}
+            </div>
+            <div>
+              <label className="signup-label">Create Password *</label>
+              <input type="password" name="password" value={mentorData.password} onChange={handleMentorChange} className="signup-input" required />
+              {mentorErrors.password && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.password}</span>}
+            </div>
+            <div>
+              <label className="signup-label">Confirm Password *</label>
+              <input type="password" name="confirmPassword" value={mentorData.confirmPassword} onChange={handleMentorChange} className="signup-input" required />
+              {mentorErrors.confirmPassword && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.confirmPassword}</span>}
             </div>
           </div>
         </section>
