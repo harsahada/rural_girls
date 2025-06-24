@@ -80,7 +80,7 @@ const BusinessForm = ({ onBack }) => {
                         </div>
                     </div>
 
-                    <div className="form-group">
+                    <div className="form-group file-upload-section">
                         <label>Business Proof (License, etc.) *</label>
                         <div className="file-input-wrapper">
                             <label htmlFor="proofDocument" className="file-input-label">
