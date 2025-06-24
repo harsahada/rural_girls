@@ -77,7 +77,7 @@ function App() {
       {showSignIn && (
         <SignInForm onSignIn={handleCloseSignIn} onSignUp={handleSwitchToSignUp} />
       )}
-      <main style={{marginTop: 80}}>
+      <main >
         {page === 'home' && <Home />}
         {page === 'elearning' && <ELearning />}
         {page === 'mentorship' && <Mentorship />}

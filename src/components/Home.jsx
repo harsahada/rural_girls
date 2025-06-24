@@ -46,171 +46,85 @@ const features = [
   },
 ];
 
-const Home = () => {
+const Home = ({ isDarkMode }) => {
   return (
-    <div className="sr-home-root">
+    <div style={{
+      width: '100%',
+      // maxWidth: 1200,
+      margin: '0 auto',
+      // padding: '32px 0',
+      minHeight: '100vh',
+      background: isDarkMode
+        ? 'linear-gradient(120deg, #18162a 0%, #232046 100%)'
+        : 'linear-gradient(120deg, #f8e1f4 0%, #f3e7fa 100%)',
+      color: isDarkMode ? '#f3f3f3' : '#222',
+    }}>
       {/* Hero Section */}
-      <section className="sr-hero" aria-label="Hero">
-        <h1>
+      <section style={{
+        background: isDarkMode
+          ? 'linear-gradient(90deg, #232046 0%, #3a2066 100%)'
+          : 'linear-gradient(90deg, #e75480 0%, #a259ec 100%)',
+        borderRadius: 24,
+        padding: '2.5rem 1.5rem',
+        marginBottom: 36,
+        color: isDarkMode ? '#fff' : '#fff',
+        textAlign: 'center',
+      }}>
+        <h1 style={{ fontSize: '2.2rem', fontWeight: 700, marginBottom: 12 }}>
           Empowering Rural Girls Through Education & Opportunity <span role="img" aria-label="sparkles">✨</span>
         </h1>
-        <p>
+        <p style={{ fontSize: '1.15rem', marginBottom: 28, color: isDarkMode ? '#e0e0e0' : '#f8f8f8' }}>
           Access quality education, connect with mentors, develop skills, and start your entrepreneurial journey - all in your native language.
         </p>
-        <div className="sr-hero-btns">
-          <button className="sr-btn sr-btn-join">🌞 Join Free Today</button>
-          <button className="sr-btn sr-btn-signin">🔑 Sign In</button>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 18 }}>
+          <button style={{ background: isDarkMode ? '#232046' : '#fffbe6', color: '#e75480', fontWeight: 600, border: 'none', borderRadius: 12, padding: '0.8em 2em', fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 2px 8px rgba(162,89,255,0.08)' }}>🌞 Join Free Today</button>
+          <button style={{ background: isDarkMode ? 'rgba(255,255,255,0.08)' : 'rgba(255,255,255,0.18)', color: '#fff', fontWeight: 600, border: 'none', borderRadius: 12, padding: '0.8em 2em', fontSize: '1.1rem', cursor: 'pointer', boxShadow: '0 2px 8px rgba(162,89,255,0.08)' }}>🔑 Sign In</button>
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="sr-stats" aria-label="Platform statistics">
-        {stats.map(stat => (
-          <div key={stat.label} className="sr-stat-card">
-            <div className="sr-stat-value">{stat.value}</div>
-            <div className="sr-stat-label">{stat.label}</div>
+      <section style={{ display: 'flex', justifyContent: 'center', gap: 32, marginBottom: 36, flexWrap: 'wrap' }}>
+        {stats.map((stat, idx) => (
+          <div key={stat.label} style={{
+            background: isDarkMode ? '#232046' : '#fff',
+            borderRadius: 16,
+            boxShadow: '0 2px 8px rgba(162,89,255,0.08)',
+            padding: '1.2em 2.2em',
+            minWidth: 160,
+            textAlign: 'center',
+            margin: 8,
+            color: isDarkMode ? '#f3f3f3' : '#444',
+          }}>
+            <div style={{ fontSize: 28, fontWeight: 700, color: '#a259ec', marginBottom: 4 }}>{stat.value}</div>
+            <div style={{ fontSize: 15 }}>{stat.label}</div>
           </div>
         ))}
       </section>
 
       {/* Features Section */}
-      <section className="sr-features" aria-label="Platform features">
-        {features.map(feature => (
-          <div key={feature.title} className="sr-feature-card">
+      <section style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: 32 }}>
+        {features.map((feature, idx) => (
+          <div key={feature.title} style={{
+            background: isDarkMode ? '#232046' : '#fff',
+            borderRadius: 18,
+            boxShadow: '0 2px 8px rgba(162,89,255,0.08)',
+            padding: '2em 1.5em',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            minHeight: 200,
+            color: isDarkMode ? '#f3f3f3' : '#444',
+          }}>
             <div>
-              <div className="sr-feature-title" style={{ color: feature.color }}>{feature.title}</div>
-              <div className="sr-feature-desc">{feature.description}</div>
+              <div style={{ fontSize: 22, fontWeight: 700, color: feature.color, marginBottom: 8 }}>{feature.title}</div>
+              <div style={{ fontSize: 15, marginBottom: 18 }}>{feature.description}</div>
             </div>
-            <button className="sr-btn" style={{ background: feature.color }}>{feature.button}</button>
+            <button style={{ background: feature.color, color: '#fff', border: 'none', borderRadius: 10, padding: '0.7em 1.4em', fontWeight: 600, fontSize: 15, cursor: 'pointer', alignSelf: 'flex-start', marginTop: 8 }}> {feature.button}</button>
           </div>
         ))}
       </section>
-
-      <style>{`
-        .sr-home-root {
-          min-height: 100vh;
-          background: linear-gradient(120deg, #f8e1f4 0%, #f3e7fa 100%);
-          font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
-          color: #2d2940;
-          display: flex;
-          flex-direction: column;
-          padding-bottom: 48px;
-        }
-        .sr-hero {
-          min-height: 38vh;
-          background: linear-gradient(90deg, #e75480 0%, #a259ec 100%);
-          border-radius: 24px;
-          padding: 2.5rem 1.5rem 2rem 1.5rem;
-          margin: 32px auto 36px auto;
-          color: #fff;
-          text-align: center;
-          max-width: 900px;
-          box-shadow: 0 2px 16px rgba(162,89,255,0.08);
-        }
-        .sr-hero h1 {
-          font-size: 2.2rem;
-          font-weight: 700;
-          margin-bottom: 12px;
-        }
-        .sr-hero p {
-          font-size: 1.15rem;
-          margin-bottom: 28px;
-          color: #f8f8f8;
-        }
-        .sr-hero-btns {
-          display: flex;
-          justify-content: center;
-          gap: 18px;
-          flex-wrap: wrap;
-        }
-        .sr-btn {
-          font-weight: 600;
-          border: none;
-          border-radius: 12px;
-          padding: 0.8em 2em;
-          font-size: 1.1rem;
-          cursor: pointer;
-          box-shadow: 0 2px 8px rgba(162,89,255,0.08);
-          transition: background 0.2s, color 0.2s;
-        }
-        .sr-btn-join {
-          background: #fffbe6;
-          color: #e75480;
-        }
-        .sr-btn-signin {
-          background: rgba(255,255,255,0.18);
-          color: #fff;
-        }
-        .sr-stats {
-          display: flex;
-          justify-content: center;
-          gap: 32px;
-          margin-bottom: 36px;
-          flex-wrap: wrap;
-        }
-        .sr-stat-card {
-          background: #fff;
-          border-radius: 16px;
-          box-shadow: 0 2px 8px rgba(162,89,255,0.08);
-          padding: 1.2em 2.2em;
-          min-width: 140px;
-          text-align: center;
-          margin: 8px;
-        }
-        .sr-stat-value {
-          font-size: 28px;
-          font-weight: 700;
-          color: #a259ec;
-          margin-bottom: 4px;
-        }
-        .sr-stat-label {
-          font-size: 15px;
-          color: #444;
-        }
-        .sr-features {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-          gap: 32px;
-          margin-bottom: 48px;
-        }
-        .sr-feature-card {
-          background: #fff;
-          border-radius: 18px;
-          box-shadow: 0 2px 8px rgba(162,89,255,0.08);
-          padding: 2em 1.5em;
-          display: flex;
-          flex-direction: column;
-          justify-content: space-between;
-          min-height: 200px;
-        }
-        .sr-feature-title {
-          font-size: 22px;
-          font-weight: 700;
-          margin-bottom: 8px;
-        }
-        .sr-feature-desc {
-          font-size: 15px;
-          color: #444;
-          margin-bottom: 18px;
-        }
-        @media (max-width: 600px) {
-          .sr-hero {
-            padding: 1.2rem 0.5rem 1.2rem 0.5rem;
-            font-size: 1rem;
-          }
-          .sr-hero h1 {
-            font-size: 1.3rem;
-          }
-          .sr-stats {
-            gap: 12px;
-          }
-          .sr-feature-card {
-            padding: 1em 0.5em;
-          }
-        }
-      `}</style>
     </div>
   );
 };
 
-export default Home;
+export default Home; 

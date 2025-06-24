@@ -215,25 +215,25 @@ export default function SignupForm({ onCancel, onSignIn }) {
           Already have an account?{' '}
           <a href="#" style={{ color: '#a259c6', fontWeight: 600, textDecoration: 'none' }} onClick={e => { e.preventDefault(); if (onSignIn) onSignIn(); }}>Sign In</a>
         </div>
-        <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: 18 }}>
-          <button
-            type="button"
-            onClick={onCancel}
-            style={{
-              background: '#f3f4f6',
-              color: '#444',
-              border: '1.5px solid #e5e7eb',
-              borderRadius: 8,
-              padding: '0.6em 2.2em',
-              fontSize: 16,
-              fontWeight: 500,
-              cursor: 'pointer',
-              boxShadow: '0 1px 4px rgba(0,0,0,0.07)'
-            }}
-          >
-            Cancel
-          </button>
-        </div>
+      <div style={{ width: '100%', display: 'flex', justifyContent: 'center', marginTop: 18 }}>
+        <button
+          type="button"
+          onClick={onCancel}
+          style={{
+            background: '#f3f4f6',
+            color: '#444',
+            border: '1.5px solid #e5e7eb',
+            borderRadius: 8,
+            padding: '0.6em 2.2em',
+            fontSize: 16,
+            fontWeight: 500,
+            cursor: 'pointer',
+            boxShadow: '0 1px 4px rgba(0,0,0,0.07)'
+          }}
+        >
+          Cancel
+        </button>
+      </div>
         <div style={{ gridColumn: 'span 2', background: '#f3f4f6', color: '#222', borderRadius: 8, padding: 12, fontSize: 13, textAlign: 'center' }}>
           By creating an account, you agree to our <a href="#" style={{ color: '#5d5fef', textDecoration: 'underline' }}>Terms of Service</a> and <a href="#" style={{ color: '#5d5fef', textDecoration: 'underline' }}>Privacy Policy</a>. Your information will be kept secure and used only to enhance your learning experience.
         </div>
