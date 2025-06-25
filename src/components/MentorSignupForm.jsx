@@ -5,27 +5,20 @@ import { signupMentor } from './api.js';
 
 const mentorInitial = {
   fullName: '',
-  phoneticName: '',
   email: '',
   phone: '',
   jobTitle: '',
   experience: '',
   industry: '',
   mentoringExperience: '',
-  mentoringSkills: '',
   developmentSkills: '',
   goals: '',
-  hoursPerMonth: '',
-  meetingFrequency: '',
-  duration: '',
-  menteePreferences: '',
   accommodations: '',
   terms: false,
   commitment: false,
-  signature: '',
-  signatureDate: '',
   password: '',
   confirmPassword: '',
+  qualificationProof: null,
 };
 
 const sectionStyle = (bg, border, color) => ({
@@ -46,16 +39,16 @@ export default function MentorSignupForm({ onCancel, onSignIn }) {
   const [mentorSuccess, setMentorSuccess] = useState('');
 
   const handleMentorChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value, type, checked, files } = e.target;
     setMentorData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value
+      [name]: type === 'checkbox' ? checked : (type === 'file' ? files[0] : value)
     }));
   };
 
   const validateMentor = () => {
     // Only check fields that actually exist in your form and are required
-    const required = ['fullName', 'email', 'phone', 'jobTitle', 'experience', 'mentoringSkills', 'goals', 'password', 'confirmPassword', 'terms', 'commitment'];
+    const required = ['fullName', 'email', 'phone', 'jobTitle', 'experience', 'goals', 'password', 'confirmPassword', 'terms', 'commitment', 'qualificationProof'];
     const errors = {};
     
     required.forEach(field => {
@@ -87,6 +80,10 @@ export default function MentorSignupForm({ onCancel, onSignIn }) {
       errors.confirmPassword = 'Passwords do not match';
     }
     
+    if (!mentorData.qualificationProof) {
+      errors.qualificationProof = 'Proof of qualification is required';
+    }
+    
     console.log('🔍 Validation errors:', errors); // Debug log
     return errors;
   };
@@ -110,24 +107,16 @@ export default function MentorSignupForm({ onCancel, onSignIn }) {
         
         const mentorPayload = {
           fullName: mentorData.fullName,
-          phoneticName: mentorData.phoneticName,
           email: mentorData.email,
           phone: mentorData.phone,
           jobTitle: mentorData.jobTitle,
           experience: mentorData.experience,
           industry: mentorData.industry,
           mentoringExperience: mentorData.mentoringExperience,
-          mentoringSkills: mentorData.mentoringSkills,
-          developmentSkills: mentorData.developmentSkills,
           goals: mentorData.goals,
-          hoursPerMonth: mentorData.hoursPerMonth || '',
-          meetingFrequency: mentorData.meetingFrequency || '',
-          duration: mentorData.duration || '',
-          menteePreferences: mentorData.menteePreferences || '',
           accommodations: mentorData.accommodations || '',
-          signature: mentorData.signature || 'Digital Signature',
-          signatureDate: new Date().toISOString().split('T')[0],
           password: mentorData.password,
+          qualificationProof: mentorData.qualificationProof,
         };
         
         console.log('📤 Sending mentor data:', mentorPayload);
@@ -141,7 +130,7 @@ export default function MentorSignupForm({ onCancel, onSignIn }) {
           setMentorSuccess(response.message);
           
           // Reset form
-          setMentorData({ ...mentorInitial, signatureDate: new Date().toISOString().split('T')[0] });
+          setMentorData({ ...mentorInitial });
           
           // Clear errors
           setMentorErrors({});
@@ -239,33 +228,46 @@ export default function MentorSignupForm({ onCancel, onSignIn }) {
               <input type="text" name="industry" value={mentorData.industry} onChange={handleMentorChange} className="signup-input"  />
               {mentorErrors.industry && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.industry}</span>}
             </div>
-            <div style={{ gridColumn: 'span 2' }}>
-              <label className="signup-label">Previous Mentoring Experience</label>
-              <textarea name="mentoringExperience" value={mentorData.mentoringExperience} onChange={handleMentorChange} className="signup-input" rows={2} placeholder="Describe any previous mentoring experience..." />
-            </div>
           </div>
         </section>
-        {/* Skills and Interests */}
-        <section style={sectionStyle('#f6f0fd', 'none', '#7c3aed')}>
+        {/* Goals for Participating in the Program */}
+        <section style={sectionStyle('#f6f0ff', 'none', '#7c3aed')}>
+          <div style={{ fontWeight: 700, fontSize: 18, color: '#7c3aed', marginBottom: 6 }}>Goals for Participating in the Program *</div>
+          <textarea name="goals" value={mentorData.goals} onChange={handleMentorChange} className="signup-input" rows={2} placeholder="What do you hope to achieve through this mentorship program?" required />
+          {mentorErrors.goals && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.goals}</span>}
+        </section>
+        {/* Proof of Qualification Upload */}
+        <section style={sectionStyle('#f0fdf4', '1.5px solid #22d3ee', '#059669')}>
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
-            <span style={iconStyle} role="img" aria-label="Skills">⭐</span>
-            <span style={{ fontWeight: 700, fontSize: 20, color: '#7c3aed' }}>Skills and Interests</span>
+            <span style={{ fontSize: 24, marginRight: 10, verticalAlign: 'middle' }} role="img" aria-label="Proof">📄</span>
+            <span style={{ fontWeight: 700, fontSize: 20, color: '#059669' }}>Proof of Qualification *</span>
           </div>
-          <div>
-            <label className="signup-label">Skills You Can Mentor Others On *</label>
-            <textarea name="mentoringSkills" value={mentorData.mentoringSkills} onChange={handleMentorChange} className="signup-input" rows={2} required placeholder="List the skills and expertise you can share with mentees..." />
-            {mentorErrors.mentoringSkills && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.mentoringSkills}</span>}
+          <label htmlFor="qualificationProof" style={{ fontWeight: 500, color: '#059669', marginBottom: 6, display: 'block' }}>Upload a PDF or image (degree certificate, result, etc.)</label>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+            <label htmlFor="qualificationProof" style={{
+              background: '#3b82f6', color: 'white', padding: '0.6em 1.2em', borderRadius: 8, cursor: 'pointer', fontWeight: 600, fontSize: 16, border: 'none', display: 'inline-block', marginBottom: 0
+            }}>
+              Select File
+            </label>
+            <input
+              id="qualificationProof"
+              type="file"
+              name="qualificationProof"
+              accept=".pdf,.jpg,.jpeg,.png"
+              onChange={handleMentorChange}
+              style={{ display: 'none' }}
+              required
+            />
+            <span style={{ fontStyle: 'italic', color: '#059669', fontSize: 15 }}>
+              {mentorData.qualificationProof ? mentorData.qualificationProof.name : 'No file selected'}
+            </span>
           </div>
-          <div>
-            <label className="signup-label">Goals for Participating in the Program *</label>
-            <textarea name="goals" value={mentorData.goals} onChange={handleMentorChange} className="signup-input" rows={2} required placeholder="What do you hope to achieve through this mentorship program?" />
-            {mentorErrors.goals && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.goals}</span>}
-          </div>
+          {mentorErrors.qualificationProof && <span style={{ color: 'red', fontSize: 13 }}>{mentorErrors.qualificationProof}</span>}
         </section>
         {/* Consent and Agreement */}
         <section style={sectionStyle('#fee2e2', 'none', '#dc2626')}>
           <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
-            <span style={iconStyle} role="img" aria-label="Consent">📝</span>
+            <span style={iconStyle} role="img" aria-label="Consent">��</span>
             <span style={{ fontWeight: 700, fontSize: 20, color: '#dc2626' }}>Consent and Agreement</span>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>

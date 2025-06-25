@@ -47,14 +47,8 @@ const userSchema = new mongoose.Schema(
     language: {
       type: String,
     },
-    interests: [
-      {
-        type: String,
-      },
-    ],
 
     // Mentor-specific fields
-    phoneticName: String,
     phone: {
       type: String,
       required: function () {
@@ -74,15 +68,13 @@ const userSchema = new mongoose.Schema(
       },
     },
     industry: String,
-    mentoringExperience: String,
-    mentoringSkills: {
+    goals: {
       type: String,
       required: function () {
         return this.role === "mentor"
       },
     },
-    developmentSkills: String,
-    goals: {
+    qualificationProof: {
       type: String,
       required: function () {
         return this.role === "mentor"
@@ -93,8 +85,6 @@ const userSchema = new mongoose.Schema(
     duration: String,
     menteePreferences: String,
     accommodations: String,
-    signature: String,
-    signatureDate: String,
 
     // Common fields
     isActive: {

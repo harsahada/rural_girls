@@ -84,15 +84,11 @@ router.post("/signup/mentor", async (req, res) => {
 
     const {
       fullName,
-      phoneticName,
       email,
       phone,
       jobTitle,
       experience,
-      industry,
-      mentoringExperience,
       mentoringSkills,
-      developmentSkills,
       goals,
       hoursPerMonth,
       meetingFrequency,
@@ -129,17 +125,13 @@ router.post("/signup/mentor", async (req, res) => {
     // Create new mentor
     const mentor = new User({
       fullName,
-      phoneticName: phoneticName || "",
       email,
       password: tempPassword, // Temporary password
       role: "mentor",
       phone,
       jobTitle,
       experience,
-      industry: industry || "",
-      mentoringExperience: mentoringExperience || "",
       mentoringSkills,
-      developmentSkills: developmentSkills || "",
       goals,
       hoursPerMonth: hoursPerMonth || "",
       meetingFrequency: meetingFrequency || "",

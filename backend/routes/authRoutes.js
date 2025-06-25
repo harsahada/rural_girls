@@ -1,8 +1,10 @@
 import express from "express"
 import jwt from "jsonwebtoken"
 import User from "../models/User.js"
+import multer from "multer"
 
 const router = express.Router()
+const upload = multer({ dest: "uploads/" }) // Configure multer for file uploads
 
 // Generate JWT Token
 const generateToken = (userId) => {
@@ -77,40 +79,30 @@ router.post("/signup/user", async (req, res) => {
   }
 })
 
-// 👨‍🏫 MENTOR SIGN UP ROUTE - EXACT PATH: /api/auth/signup/mentor
-router.post("/signup/mentor", async (req, res) => {
+// 🧑‍🏫 MENTOR SIGN UP ROUTE - EXACT PATH: /api/auth/signup/mentor
+router.post("/signup/mentor", upload.single("qualificationProof"), async (req, res) => {
   try {
-    console.log("👨‍🏫 Mentor signup attempt:", req.body.email)
+    console.log("🧑‍🏫 Mentor signup attempt:", req.body.email)
+    console.log("📁 Uploaded file:", req.file)
+    console.log("📝 Form data:", req.body)
 
-    const {
-      fullName,
-      phoneticName,
-      email,
-      phone,
-      jobTitle,
-      experience,
-      industry,
-      mentoringExperience,
-      mentoringSkills,
-      developmentSkills,
-      goals,
-      hoursPerMonth,
-      meetingFrequency,
-      duration,
-      menteePreferences,
-      accommodations,
-      signature,
-      signatureDate,
-    } = req.body
+    const { fullName, email, phone, jobTitle, experience, industry, goals, accommodations, password } = req.body
+
+    // File upload
+    const qualificationProof = req.file ? req.file.filename : null
 
     // Validate required fields
-    const requiredFields = ["fullName", "email", "phone", "jobTitle", "experience", "mentoringSkills", "goals"]
-    const missingFields = requiredFields.filter((field) => !req.body[field])
-
-    if (missingFields.length > 0) {
+    if (!fullName || !email || !phone || !jobTitle || !experience || !goals || !password) {
       return res.status(400).json({
         success: false,
-        message: `Missing required fields: ${missingFields.join(", ")}`,
+        message: "Please provide all required fields",
+      })
+    }
+
+    if (!qualificationProof) {
+      return res.status(400).json({
+        success: false,
+        message: "Qualification proof file is required",
       })
     }
 
@@ -123,32 +115,20 @@ router.post("/signup/mentor", async (req, res) => {
       })
     }
 
-    // Create temporary password for mentor (they'll set it later)
-    const tempPassword = Math.random().toString(36).slice(-8)
-
     // Create new mentor
     const mentor = new User({
       fullName,
-      phoneticName: phoneticName || "",
       email,
-      password: tempPassword, // Temporary password
+      password, // This will be hashed automatically by the pre-save hook
       role: "mentor",
       phone,
       jobTitle,
       experience,
       industry: industry || "",
-      mentoringExperience: mentoringExperience || "",
-      mentoringSkills,
-      developmentSkills: developmentSkills || "",
       goals,
-      hoursPerMonth: hoursPerMonth || "",
-      meetingFrequency: meetingFrequency || "",
-      duration: duration || "",
-      menteePreferences: menteePreferences || "",
       accommodations: accommodations || "",
-      signature: signature || "",
-      signatureDate: signatureDate || new Date().toISOString().split("T")[0],
-      isApproved: false, // Mentors need approval
+      qualificationProof,
+      isApproved: false, // Set to false for review
     })
 
     await mentor.save()
@@ -167,13 +147,12 @@ router.post("/signup/mentor", async (req, res) => {
         experience: mentor.experience,
         isApproved: mentor.isApproved,
       },
-      note: "You will receive login credentials via email once your application is approved.",
     })
   } catch (error) {
-    console.error("❌ Mentor signup error:", error.message)
-    res.status(400).json({
+    console.error("❌ Mentor signup error:", error)
+    res.status(500).json({
       success: false,
-      message: "Failed to submit mentor application",
+      message: "Something went wrong!",
       error: error.message,
     })
   }
