@@ -1,6 +1,6 @@
 import { useState } from "react";
-import UserSignupForm from "./UserSignupForm";
-import MentorSignupForm from "./MentorSignupForm";
+import UserSignupForm from "./UserSignupForm.jsx";
+import MentorSignupForm from "./MentorSignupForm.jsx";
 
 export default function SignupForm({ onCancel, onSignIn }) {
   const [step, setStep] = useState('welcome'); // 'welcome', 'user', 'mentor'
