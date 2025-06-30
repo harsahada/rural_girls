@@ -1,6 +1,6 @@
 import { useState } from "react";
 import './SignupForm.css';
-import { signupMentor } from '../api.js';
+import { signupMentor } from './api.js';
 
 
 const mentorInitial = {

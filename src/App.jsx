@@ -1,17 +1,16 @@
 import { useState } from 'react'
 import Navbar from './components/Navbar.jsx'
-import SignupForm from './components/public/SignupForm.jsx'
-import SignInForm from './components/public/SignInForm.jsx'
-import Home from './components/public/Home.jsx'
-import ELearning from './components/public/ELearning.jsx'
-import Footer from './components/public/Footer.jsx'
-import Mentorship from './components/public/Mentorship.jsx'
-import Skills from './components/public/Skills.jsx'
-import Community from './components/public/Community.jsx'
-import Marketplace from './components/public/Marketplace.jsx'
-import Business from './components/public/Business.jsx'
-import BusinessForm from './components/public/BusinessForm.jsx'
-import UserDashboard from './components/user/UserDashboard.jsx'
+import SignupForm from './components/SignupForm.jsx'
+import SignInForm from './components/SignInForm.jsx'
+import Home from './components/Home.jsx'
+import ELearning from './components/ELearning.jsx'
+import Footer from './components/Footer.jsx'
+import Mentorship from './components/Mentorship.jsx'
+import Skills from './components/Skills.jsx'
+import Community from './components/Community.jsx'
+import Marketplace from './components/Marketplace.jsx'
+import Business from './components/Business.jsx'
+import BusinessForm from './components/BusinessForm.jsx'
 import './App.css'
 
 function App() {
@@ -19,8 +18,6 @@ function App() {
   const [showSignIn, setShowSignIn] = useState(false)
   const [page, setPage] = useState('home');
   const [showBusinessForm, setShowBusinessForm] = useState(false);
-  const [authUser, setAuthUser] = useState(null);
-  const [userRole, setUserRole] = useState(null);
 
   // Handler to open the signup modal
   const handleJoinFree = () => setShowSignup(true)
@@ -55,20 +52,6 @@ function App() {
   const handleAddBusinessClick = () => setShowBusinessForm(true);
   const handleCloseBusinessForm = () => setShowBusinessForm(false);
 
-  // Handler for successful sign in
-  const handleSignInSuccess = (user, token) => {
-    setAuthUser(user);
-    setUserRole(user.role);
-    setShowSignIn(false);
-  };
-
-  // Handler for sign out
-  const handleSignOut = () => {
-    setAuthUser(null);
-    setUserRole(null);
-    localStorage.removeItem('authToken');
-  };
-
   // Placeholder components for other pages
   // const Mentorship = () => <div style={{minHeight:'60vh',display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,fontWeight:600}}>Mentorship Page</div>;
   // const Community = () => <div style={{minHeight:'60vh',display:'flex',alignItems:'center',justifyContent:'center',fontSize:28,fontWeight:600}}>Community Page</div>;
@@ -87,9 +70,6 @@ function App() {
         onMarketplace={handleMarketplace}
         onBusiness={handleBusiness}
         activePage={page}
-        authUser={authUser}
-        userRole={userRole}
-        onSignOut={handleSignOut}
       />
       {showBusinessForm && <BusinessForm onBack={handleCloseBusinessForm} />}
       {showSignup && (
@@ -101,22 +81,16 @@ function App() {
         </div>
       )}
       {showSignIn && (
-        <SignInForm onSignIn={handleSignInSuccess} onSignUp={handleSwitchToSignUp} onClose={handleCloseSignIn} />
+        <SignInForm onSignIn={handleCloseSignIn} onSignUp={handleSwitchToSignUp} onClose={handleCloseSignIn} />
       )}
       <main >
-        {authUser && userRole === 'user' ? (
-          <UserDashboard user={authUser} />
-        ) : (
-          <>
-            {page === 'home' && <Home />}
-            {page === 'elearning' && <ELearning />}
-            {page === 'mentorship' && <Mentorship />}
-            {page === 'skills' && <Skills />}
-            {page === 'community' && <Community />}
-            {page === 'marketplace' && <Marketplace onAddBusinessClick={handleAddBusinessClick} />}
-            {page === 'business' && <Business />}
-          </>
-        )}
+        {page === 'home' && <Home />}
+        {page === 'elearning' && <ELearning />}
+        {page === 'mentorship' && <Mentorship />}
+        {page === 'skills' && <Skills />}
+        {page === 'community' && <Community />}
+        {page === 'marketplace' && <Marketplace onAddBusinessClick={handleAddBusinessClick} />}
+        {page === 'business' && <Business />}
       </main>
       <Footer />
       <style>{`

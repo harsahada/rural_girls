@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import './SignInForm.css';
-import { signin, saveToken } from '../api.js';
+import { signin, saveToken } from './api.js';
 
 
 const validateEmail = (email) => {

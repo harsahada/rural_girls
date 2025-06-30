@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { signupUser, saveToken } from '../api.js';
+import { signupUser, saveToken } from './api.js';
 import { Eye, EyeOff } from "lucide-react";
 import './SignupForm.css';
 
