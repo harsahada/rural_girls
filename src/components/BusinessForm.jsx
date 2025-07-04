@@ -28,7 +28,7 @@ const BusinessForm = ({ onBack }) => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('Form Data Submitted :', formData);
-        alert('Thank U for submitting your bussiness!! it will be reviewed shortly.');
+        alert("Thank you for submitting your business! It is now instantly visible in the marketplace.");
         if (onBack) onBack();
     };
 
@@ -36,7 +36,7 @@ const BusinessForm = ({ onBack }) => {
         <div className="business-form-overlay">
             <div className="business-form-container">
                 <h2 className="form-title">Add Your Business</h2>
-                <p className="form-subtitle">Fill Out The Details Below To Get Your Buniess Listed On The Marketplace.</p>
+                <p className="form-subtitle">Your business will be instantly visible after submission. No approval needed!</p>
 
                 <form onSubmit={handleSubmit} className="business-form">
                     <div className="form-row">

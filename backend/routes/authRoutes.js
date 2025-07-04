@@ -128,16 +128,15 @@ router.post("/signup/mentor", upload.single("qualificationProof"), async (req, r
       goals,
       accommodations: accommodations || "",
       qualificationProof,
-      isApproved: false, // Set to false for review
     })
 
     await mentor.save()
 
-    console.log("✅ Mentor application submitted:", mentor.email)
+    console.log("✅ Mentor account created successfully:", mentor.email)
 
     res.status(201).json({
       success: true,
-      message: "Mentor application submitted successfully! We will review your application and contact you soon.",
+      message: "Mentor account created successfully! You can now log in and start mentoring.",
       mentor: {
         id: mentor._id,
         fullName: mentor.fullName,
@@ -145,7 +144,6 @@ router.post("/signup/mentor", upload.single("qualificationProof"), async (req, r
         role: mentor.role,
         jobTitle: mentor.jobTitle,
         experience: mentor.experience,
-        isApproved: mentor.isApproved,
       },
     })
   } catch (error) {
@@ -181,14 +179,6 @@ router.post("/signin", async (req, res) => {
       })
     }
 
-    // Check if mentor is approved
-    if (user.role === "mentor" && !user.isApproved) {
-      return res.status(401).json({
-        success: false,
-        message: "Your mentor application is still under review. Please wait for approval.",
-      })
-    }
-
     // Check password
     const isPasswordValid = await user.comparePassword(password)
     if (!isPasswordValid) {
@@ -211,7 +201,6 @@ router.post("/signin", async (req, res) => {
         fullName: user.fullName,
         email: user.email,
         role: user.role,
-        isApproved: user.isApproved,
       },
       token,
     })

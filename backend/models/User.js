@@ -91,12 +91,6 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: true,
     },
-    isApproved: {
-      type: Boolean,
-      default: function () {
-        return this.role === "user"
-      }, // Users auto-approved, mentors need approval
-    },
   },
   {
     timestamps: true,

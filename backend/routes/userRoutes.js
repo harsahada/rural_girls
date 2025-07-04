@@ -140,16 +140,15 @@ router.post("/signup/mentor", async (req, res) => {
       accommodations: accommodations || "",
       signature: signature || "",
       signatureDate: signatureDate || new Date().toISOString().split("T")[0],
-      isApproved: false, // Mentors need approval
     })
 
     await mentor.save()
 
-    console.log("✅ Mentor application submitted:", mentor.email)
+    console.log("✅ Mentor account created successfully:", mentor.email)
 
     res.status(201).json({
       success: true,
-      message: "Mentor application submitted successfully! We will review your application and contact you soon.",
+      message: "Mentor account created successfully! You can now log in and start mentoring.",
       mentor: {
         id: mentor._id,
         fullName: mentor.fullName,
@@ -157,15 +156,14 @@ router.post("/signup/mentor", async (req, res) => {
         role: mentor.role,
         jobTitle: mentor.jobTitle,
         experience: mentor.experience,
-        isApproved: mentor.isApproved,
       },
-      note: "You will receive login credentials via email once your application is approved.",
+      note: "You can now log in and start mentoring immediately!",
     })
   } catch (error) {
     console.error("❌ Mentor signup error:", error.message)
     res.status(400).json({
       success: false,
-      message: "Failed to submit mentor application",
+      message: "Failed to create mentor account",
       error: error.message,
     })
   }
@@ -194,14 +192,6 @@ router.post("/signin", async (req, res) => {
       })
     }
 
-    // Check if mentor is approved
-    if (user.role === "mentor" && !user.isApproved) {
-      return res.status(401).json({
-        success: false,
-        message: "Your mentor application is still under review. Please wait for approval.",
-      })
-    }
-
     // Check password
     const isPasswordValid = await user.comparePassword(password)
     if (!isPasswordValid) {
@@ -224,7 +214,6 @@ router.post("/signin", async (req, res) => {
         fullName: user.fullName,
         email: user.email,
         role: user.role,
-        isApproved: user.isApproved,
       },
       token,
     })
