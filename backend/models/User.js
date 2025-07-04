@@ -47,8 +47,14 @@ const userSchema = new mongoose.Schema(
     language: {
       type: String,
     },
+    interests: [
+      {
+        type: String,
+      },
+    ],
 
     // Mentor-specific fields
+    phoneticName: String,
     phone: {
       type: String,
       required: function () {
@@ -68,13 +74,8 @@ const userSchema = new mongoose.Schema(
       },
     },
     industry: String,
+    developmentSkills: String,
     goals: {
-      type: String,
-      required: function () {
-        return this.role === "mentor"
-      },
-    },
-    qualificationProof: {
       type: String,
       required: function () {
         return this.role === "mentor"
@@ -84,12 +85,17 @@ const userSchema = new mongoose.Schema(
     meetingFrequency: String,
     duration: String,
     menteePreferences: String,
-    accommodations: String,
+    signature: String,
+    signatureDate: String,
 
     // Common fields
     isActive: {
       type: Boolean,
       default: true,
+    },
+    isApproved: {
+      type: Boolean,
+      default: true, // Changed from function to always true - auto-approve everyone
     },
   },
   {

@@ -2,7 +2,9 @@ import express from "express"
 import mongoose from "mongoose"
 import cors from "cors"
 import dotenv from "dotenv"
+import jwt from "jsonwebtoken" // Import jwt
 import authRoutes from "./routes/authRoutes.js"
+import mentorRoutes from "./routes/mentorRoutes.js"
 
 dotenv.config()
 
@@ -11,8 +13,11 @@ const PORT = process.env.PORT || 5000
 
 // Middleware
 app.use(cors())
-app.use(express.json({ limit: "10mb" })) // Increased limit for larger forms
+app.use(express.json({ limit: "10mb" }))
 app.use(express.urlencoded({ extended: true, limit: "10mb" }))
+
+// Serve uploaded files
+app.use("/uploads", express.static("uploads"))
 
 // Connect to MongoDB
 console.log("🔄 Connecting to MongoDB Atlas...")
@@ -25,8 +30,34 @@ mongoose
     console.error("❌ MongoDB connection error:", error)
   })
 
+// Authentication middleware
+const authenticateToken = (req, res, next) => {
+  const authHeader = req.headers["authorization"]
+  const token = authHeader && authHeader.split(" ")[1]
+
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: "Access token required",
+    })
+  }
+
+  jwt.verify(token, process.env.JWT_SECRET, (err, user) => {
+    if (err) {
+      return res.status(403).json({
+        success: false,
+        message: "Invalid or expired token",
+      })
+    }
+
+    req.user = user
+    next()
+  })
+}
+
 // Routes
 app.use("/api/auth", authRoutes)
+app.use("/api/mentor", authenticateToken, mentorRoutes)
 
 // Test route
 app.get("/", (req, res) => {
@@ -37,7 +68,15 @@ app.get("/", (req, res) => {
       "POST /api/auth/signup/user - Create user account",
       "POST /api/auth/signup/mentor - Submit mentor application",
       "POST /api/auth/signin - Login to account",
-      "GET /api/auth/profile - Get user profile (requires token)",
+      "GET /api/auth/profile - Get user profile",
+      "GET /api/mentor/dashboard - Mentor dashboard",
+      "GET /api/mentor/courses - Mentor courses",
+      "POST /api/mentor/courses - Create course",
+      "GET /api/mentor/materials - Study materials",
+      "POST /api/mentor/materials - Upload material",
+      "GET /api/mentor/posts - Forum posts",
+      "POST /api/mentor/posts - Create post",
+      "GET /api/mentor/connection-requests - Connection requests",
     ],
   })
 })
@@ -59,17 +98,7 @@ app.use("*", (req, res) => {
   })
 })
 
-app._router.stack.forEach(function(r){
-    if (r.route && r.route.path){
-      console.log('📍 Route:', r.route.path)
-    }
-  })
-  
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`)
-  console.log(`📋 Available routes:`)
-  console.log(`   POST http://localhost:${PORT}/api/auth/signup/user`)
-  console.log(`   POST http://localhost:${PORT}/api/auth/signup/mentor`)
-  console.log(`   POST http://localhost:${PORT}/api/auth/signin`)
-  console.log(`   GET  http://localhost:${PORT}/api/auth/profile`)
+  console.log(`📋 Mentor Dashboard available at: http://localhost:${PORT}/api/mentor/dashboard`)
 })

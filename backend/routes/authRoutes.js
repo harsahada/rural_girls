@@ -1,10 +1,8 @@
 import express from "express"
 import jwt from "jsonwebtoken"
 import User from "../models/User.js"
-import multer from "multer"
 
 const router = express.Router()
-const upload = multer({ dest: "uploads/" }) // Configure multer for file uploads
 
 // Generate JWT Token
 const generateToken = (userId) => {
@@ -79,30 +77,50 @@ router.post("/signup/user", async (req, res) => {
   }
 })
 
-// 🧑‍🏫 MENTOR SIGN UP ROUTE - EXACT PATH: /api/auth/signup/mentor
-router.post("/signup/mentor", upload.single("qualificationProof"), async (req, res) => {
+// 👨‍🏫 MENTOR SIGN UP ROUTE - EXACT PATH: /api/auth/signup/mentor
+router.post("/signup/mentor", async (req, res) => {
   try {
-    console.log("🧑‍🏫 Mentor signup attempt:", req.body.email)
-    console.log("📁 Uploaded file:", req.file)
-    console.log("📝 Form data:", req.body)
+    console.log("👨‍🏫 Mentor signup attempt:", req.body.email)
+    console.log("📝 Full request body:", req.body)
 
-    const { fullName, email, phone, jobTitle, experience, industry, goals, accommodations, password } = req.body
-
-    // File upload
-    const qualificationProof = req.file ? req.file.filename : null
+    const {
+      fullName,
+      phoneticName,
+      email,
+      phone,
+      jobTitle,
+      experience,
+      industry,
+      developmentSkills,
+      goals,
+      hoursPerMonth,
+      meetingFrequency,
+      duration,
+      menteePreferences,
+      signature,
+      signatureDate,
+      password,
+    } = req.body
 
     // Validate required fields
-    if (!fullName || !email || !phone || !jobTitle || !experience || !goals || !password) {
-      return res.status(400).json({
-        success: false,
-        message: "Please provide all required fields",
-      })
+    const requiredFields = {
+      fullName,
+      email,
+      phone,
+      jobTitle,
+      experience,
+      goals,
+      password,
     }
 
-    if (!qualificationProof) {
+    const missingFields = Object.keys(requiredFields).filter((field) => !requiredFields[field])
+
+    if (missingFields.length > 0) {
+      console.log("❌ Missing fields:", missingFields)
       return res.status(400).json({
         success: false,
-        message: "Qualification proof file is required",
+        message: `Missing required fields: ${missingFields.join(", ")}`,
+        receivedFields: Object.keys(req.body),
       })
     }
 
@@ -115,28 +133,37 @@ router.post("/signup/mentor", upload.single("qualificationProof"), async (req, r
       })
     }
 
-    // Create new mentor
+    // Create new mentor with provided password
     const mentor = new User({
       fullName,
+      phoneticName: phoneticName || "",
       email,
-      password, // This will be hashed automatically by the pre-save hook
+      password,
       role: "mentor",
       phone,
       jobTitle,
       experience,
       industry: industry || "",
+      developmentSkills: developmentSkills || "",
       goals,
-      accommodations: accommodations || "",
-      qualificationProof,
+      hoursPerMonth: hoursPerMonth || "",
+      meetingFrequency: meetingFrequency || "",
+      duration: duration || "",
+      menteePreferences: menteePreferences || "",
+      signature: signature || "",
+      signatureDate: signatureDate || new Date().toISOString().split("T")[0],
     })
 
     await mentor.save()
 
-    console.log("✅ Mentor account created successfully:", mentor.email)
+    // Generate token for immediate login
+    const token = generateToken(mentor._id)
+
+    console.log("✅ Mentor account created and approved:", mentor.email)
 
     res.status(201).json({
       success: true,
-      message: "Mentor account created successfully! You can now log in and start mentoring.",
+      message: "Mentor account created successfully! You can now login.",
       mentor: {
         id: mentor._id,
         fullName: mentor.fullName,
@@ -144,13 +171,15 @@ router.post("/signup/mentor", upload.single("qualificationProof"), async (req, r
         role: mentor.role,
         jobTitle: mentor.jobTitle,
         experience: mentor.experience,
+        isApproved: mentor.isApproved,
       },
+      token,
     })
   } catch (error) {
-    console.error("❌ Mentor signup error:", error)
-    res.status(500).json({
+    console.error("❌ Mentor signup error:", error.message)
+    res.status(400).json({
       success: false,
-      message: "Something went wrong!",
+      message: "Failed to create mentor account",
       error: error.message,
     })
   }
@@ -179,6 +208,8 @@ router.post("/signin", async (req, res) => {
       })
     }
 
+    // Removed mentor approval check - all users can login now
+
     // Check password
     const isPasswordValid = await user.comparePassword(password)
     if (!isPasswordValid) {
@@ -201,6 +232,7 @@ router.post("/signin", async (req, res) => {
         fullName: user.fullName,
         email: user.email,
         role: user.role,
+        isApproved: user.isApproved,
       },
       token,
     })

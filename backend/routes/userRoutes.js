@@ -88,19 +88,17 @@ router.post("/signup/mentor", async (req, res) => {
       phone,
       jobTitle,
       experience,
-      mentoringSkills,
       goals,
       hoursPerMonth,
       meetingFrequency,
       duration,
       menteePreferences,
-      accommodations,
       signature,
       signatureDate,
     } = req.body
 
     // Validate required fields
-    const requiredFields = ["fullName", "email", "phone", "jobTitle", "experience", "mentoringSkills", "goals"]
+    const requiredFields = ["fullName", "email", "phone", "jobTitle", "experience", "goals"]
     const missingFields = requiredFields.filter((field) => !req.body[field])
 
     if (missingFields.length > 0) {
@@ -131,15 +129,14 @@ router.post("/signup/mentor", async (req, res) => {
       phone,
       jobTitle,
       experience,
-      mentoringSkills,
       goals,
       hoursPerMonth: hoursPerMonth || "",
       meetingFrequency: meetingFrequency || "",
       duration: duration || "",
       menteePreferences: menteePreferences || "",
-      accommodations: accommodations || "",
       signature: signature || "",
       signatureDate: signatureDate || new Date().toISOString().split("T")[0],
+      isApproved: false, // Mentors need approval
     })
 
     await mentor.save()
@@ -148,7 +145,7 @@ router.post("/signup/mentor", async (req, res) => {
 
     res.status(201).json({
       success: true,
-      message: "Mentor account created successfully! You can now log in and start mentoring.",
+      message: "Mentor application submitted successfully! We will review your application and contact you soon.",
       mentor: {
         id: mentor._id,
         fullName: mentor.fullName,
@@ -156,8 +153,9 @@ router.post("/signup/mentor", async (req, res) => {
         role: mentor.role,
         jobTitle: mentor.jobTitle,
         experience: mentor.experience,
+        isApproved: mentor.isApproved,
       },
-      note: "You can now log in and start mentoring immediately!",
+      note: "You will receive login credentials via email once your application is approved.",
     })
   } catch (error) {
     console.error("❌ Mentor signup error:", error.message)
@@ -201,6 +199,14 @@ router.post("/signin", async (req, res) => {
       })
     }
 
+    // Reinstate mentor approval check in login
+    if (user.role === "mentor" && !user.isApproved) {
+      return res.status(401).json({
+        success: false,
+        message: "Your mentor application is still under review. Please wait for approval.",
+      })
+    }
+
     // Generate token
     const token = generateToken(user._id)
 
@@ -214,6 +220,7 @@ router.post("/signin", async (req, res) => {
         fullName: user.fullName,
         email: user.email,
         role: user.role,
+        isApproved: user.isApproved,
       },
       token,
     })

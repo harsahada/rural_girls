@@ -68,21 +68,16 @@ export const signupUser = async (userData) => {
   })
 }
 
-// Mentor signup (WITH file upload)
+// Mentor signup (no file upload needed)
 export const signupMentor = async (mentorData) => {
   console.log("👨‍🏫 Signing up mentor:", mentorData.email)
+  console.log("📤 Sending mentor data:", mentorData)
 
-  // Create FormData for file upload
-  const formData = new FormData()
-
-  // Add all mentor data to FormData
-  Object.keys(mentorData).forEach((key) => {
-    if (mentorData[key] !== null && mentorData[key] !== undefined) {
-      formData.append(key, mentorData[key])
-    }
+  // Send as JSON instead of FormData since we're not uploading files
+  return await apiCall("/auth/signup/mentor", {
+    method: "POST",
+    body: JSON.stringify(mentorData),
   })
-
-  return await apiCallWithFile("/auth/signup/mentor", formData)
 }
 
 // Sign in (no file upload)
